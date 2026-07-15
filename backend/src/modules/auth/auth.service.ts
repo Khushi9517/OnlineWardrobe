@@ -1,8 +1,13 @@
 import bcrypt from "bcryptjs";
 
-import { User } from "./user.model";
-import { RegisterUserInput } from "./auth.types";
 import { AppError } from "../../utils/appError";
+import { generateToken } from "../../utils/jwt";
+
+import { User } from "./user.model";
+import {
+  RegisterUserInput,
+  LoginUserInput,
+} from "./auth.types";
 
 export const registerUser = async (
   userData: RegisterUserInput
@@ -12,11 +17,11 @@ export const registerUser = async (
   });
 
   if (existingUser) {
-  throw new AppError(
-    "User already exists",
-    409
-  );
-}
+    throw new AppError(
+      "User already exists",
+      409
+    );
+  }
 
   const hashedPassword = await bcrypt.hash(
     userData.password,
@@ -29,5 +34,48 @@ export const registerUser = async (
     password: hashedPassword,
   });
 
-  return user;
+  const token = generateToken(
+    String(user._id)
+  );
+
+  return {
+    user,
+    token,
+  };
+};
+
+export const loginUser = async (
+  userData: LoginUserInput
+) => {
+  const user = await User.findOne({
+    email: userData.email,
+  });
+
+  if (!user) {
+    throw new AppError(
+      "Invalid email or password",
+      401
+    );
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    userData.password,
+    user.password
+  );
+
+  if (!isPasswordValid) {
+    throw new AppError(
+      "Invalid email or password",
+      401
+    );
+  }
+
+  const token = generateToken(
+    String(user._id)
+  );
+
+  return {
+    user,
+    token,
+  };
 };

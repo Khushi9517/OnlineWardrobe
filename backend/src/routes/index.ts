@@ -1,6 +1,10 @@
 import { Router } from "express";
 
-import { authRoutes } from "../modules/auth";
+import {
+  authRoutes,
+  userRoutes,
+} from "../modules/auth";
+import { wardrobeRoutes } from "../modules/wardrobe";
 
 const router = Router();
 
@@ -12,5 +16,9 @@ router.get("/", (_req, res) => {
 });
 
 router.use("/api/auth", authRoutes);
+
+router.use("/api/users", userRoutes);
+
+router.use("/api/wardrobe", wardrobeRoutes);
 
 export default router;

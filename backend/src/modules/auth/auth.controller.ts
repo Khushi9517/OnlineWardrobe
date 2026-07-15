@@ -1,9 +1,27 @@
 import { Request, Response } from "express";
 
-export const register = async (_req: Request, res: Response) => {
-  res.status(200).json({
+import { registerUser } from "./auth.service";
+import { generateToken } from "../../utils/jwt";
+
+export const register = async (
+  req: Request,
+  res: Response
+) => {
+  const user = await registerUser(req.body);
+
+  const token = generateToken(user._id.toString());
+
+  res.status(201).json({
     success: true,
-    message: "Register endpoint",
+
+    token,
+
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      profilePicture: user.profilePicture,
+    },
   });
 };
 

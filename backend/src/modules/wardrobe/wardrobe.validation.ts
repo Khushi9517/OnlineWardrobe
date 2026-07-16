@@ -8,4 +8,8 @@ export const createWardrobeItemSchema = z.object({
   color: z.string().min(1),
 
   brand: z.string().optional(),
+
+  imageUrl: z.string().optional(),
+
+  imagePublicId: z.string().optional(),
 });

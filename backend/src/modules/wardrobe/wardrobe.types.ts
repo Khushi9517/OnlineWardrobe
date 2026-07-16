@@ -3,4 +3,7 @@ export interface CreateWardrobeItemInput {
   category: string;
   color: string;
   brand?: string;
+
+  imageUrl?: string;
+  imagePublicId?: string;
 }

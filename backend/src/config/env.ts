@@ -10,6 +10,12 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(1, "JWT_SECRET is required"),
 
   JWT_EXPIRES_IN: z.enum(["1d", "7d", "30d"]).default("1d"),
+
+  CLOUDINARY_CLOUD_NAME: z.string().min(1),
+
+  CLOUDINARY_API_KEY: z.string().min(1),
+
+  CLOUDINARY_API_SECRET: z.string().min(1),
 });
 
 const parsedEnv = envSchema.parse(process.env);
@@ -24,6 +30,12 @@ const env = {
   jwtSecret: parsedEnv.JWT_SECRET,
 
   jwtExpiresIn: parsedEnv.JWT_EXPIRES_IN,
+
+  cloudinaryCloudName:parsedEnv.CLOUDINARY_CLOUD_NAME,
+
+  cloudinaryApiKey:parsedEnv.CLOUDINARY_API_KEY,
+
+  cloudinaryApiSecret:parsedEnv.CLOUDINARY_API_SECRET,
 };
 
 export default env;

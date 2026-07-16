@@ -4,7 +4,11 @@ import {
   authRoutes,
   userRoutes,
 } from "../modules/auth";
-import { wardrobeRoutes } from "../modules/wardrobe";
+
+import {
+  wardrobeRoutes,
+  uploadRoutes,
+} from "../modules/wardrobe";
 
 const router = Router();
 
@@ -20,5 +24,14 @@ router.use("/api/auth", authRoutes);
 router.use("/api/users", userRoutes);
 
 router.use("/api/wardrobe", wardrobeRoutes);
+router.use(
+  "/api/wardrobe/upload",
+  uploadRoutes
+);
+
+router.use(
+  "/api/wardrobe",
+  wardrobeRoutes
+);
 
 export default router;

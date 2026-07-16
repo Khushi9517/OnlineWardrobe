@@ -17,6 +17,10 @@ export interface IWardrobeItem
 
   brand?: string;
 
+  imageUrl?: string;
+
+  imagePublicId?: string;
+
   createdAt: Date;
 
   updatedAt: Date;
@@ -53,6 +57,16 @@ const wardrobeSchema =
         type: String,
         default: "",
       },
+
+      imageUrl: {
+  type: String,
+  default: "",
+},
+
+imagePublicId: {
+  type: String,
+  default: "",
+},
     },
     {
       timestamps: true,
@@ -64,3 +78,5 @@ export const WardrobeItem =
     "WardrobeItem",
     wardrobeSchema
   );
+
+  

@@ -61,3 +61,19 @@ export const uploadImage = async (
 
   return response.data;
 };
+
+export const deleteWardrobeItem = async (
+  token: string,
+  itemId: string
+) => {
+  const response = await api.delete(
+    `/api/wardrobe/${itemId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};

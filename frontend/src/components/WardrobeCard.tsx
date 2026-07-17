@@ -2,10 +2,12 @@ import { WardrobeItem } from "@/types/wardrobe.types";
 
 interface Props {
   item: WardrobeItem;
+  onDelete: (id: string) => void;
 }
 
 export default function WardrobeCard({
   item,
+  onDelete,
 }: Props) {
   return (
     <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
@@ -37,6 +39,14 @@ export default function WardrobeCard({
         <p className="text-sm text-gray-600">
           {item.brand}
         </p>
+        <button
+  onClick={() =>
+    onDelete(item._id)
+  }
+  className="mt-4 w-full rounded bg-red-500 p-2 text-white"
+>
+  Delete
+</button>
       </div>
     </div>
   );

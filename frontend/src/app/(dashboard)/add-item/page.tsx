@@ -9,6 +9,7 @@ import {
   createWardrobeItem,
   uploadImage,
 } from "@/services/wardrobe.service";
+import AuthGuard from "@/components/AuthGuard";
 
 export default function AddItemPage() {
   const router = useRouter();
@@ -84,6 +85,7 @@ export default function AddItemPage() {
   };
 
   return (
+    <AuthGuard>
     <div className="mx-auto max-w-xl p-8">
       <h1 className="mb-6 text-3xl font-bold">
         Add Item
@@ -161,5 +163,6 @@ export default function AddItemPage() {
         </button>
       </form>
     </div>
+    </AuthGuard>
   );
 }

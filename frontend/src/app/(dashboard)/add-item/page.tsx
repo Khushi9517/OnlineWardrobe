@@ -11,6 +11,7 @@ import {
 } from "@/services/wardrobe.service";
 import AuthGuard from "@/components/AuthGuard";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 export default function AddItemPage() {
   const router = useRouter();
@@ -26,13 +27,47 @@ export default function AddItemPage() {
   const [file, setFile] =
     useState<File | null>(null);
 
+    const [previewUrl, setPreviewUrl] =
+  useState("");
+
   const [loading, setLoading] =
     useState(false);
+
+    useEffect(() => {
+  return () => {
+    if (previewUrl) {
+      URL.revokeObjectURL(
+        previewUrl
+      );
+    }
+  };
+}, [previewUrl]);
+
 
   const handleSubmit = async (
     e: React.FormEvent
   ) => {
     e.preventDefault();
+
+    if (!name.trim()) {
+  toast.error("Please enter a name");
+  return;
+}
+
+if (!category) {
+  toast.error("Please select a category");
+  return;
+}
+
+if (!color.trim()) {
+  toast.error("Please enter a color");
+  return;
+}
+
+if (!brand.trim()) {
+  toast.error("Please enter a brand");
+  return;
+}
 
     try {
       setLoading(true);
@@ -106,17 +141,33 @@ export default function AddItemPage() {
           className="w-full rounded border p-3"
         />
 
-        <input
-          type="text"
-          placeholder="Category"
-          value={category}
-          onChange={(e) =>
-            setCategory(
-              e.target.value
-            )
-          }
-          className="w-full rounded border p-3"
-        />
+        <select
+  value={category}
+  onChange={(e) =>
+    setCategory(e.target.value)
+  }
+  className="w-full rounded border p-3"
+>
+  <option value="">
+    Select Category
+  </option>
+
+  <option value="Topwear">
+    Topwear
+  </option>
+
+  <option value="Bottomwear">
+    Bottomwear
+  </option>
+
+  <option value="Footwear">
+    Footwear
+  </option>
+
+  <option value="Accessories">
+    Accessories
+  </option>
+</select>
 
         <input
           type="text"
@@ -145,14 +196,30 @@ export default function AddItemPage() {
         <input
           type="file"
           accept="image/*"
-          onChange={(e) =>
-            setFile(
-              e.target.files?.[0] ||
-                null
-            )
-          }
+          onChange={(e) => {
+  const selectedFile =
+    e.target.files?.[0];
+
+  if (!selectedFile) return;
+
+  setFile(selectedFile);
+
+  setPreviewUrl(
+    URL.createObjectURL(
+      selectedFile
+    )
+  );
+}}
+
           className="w-full"
         />
+       {previewUrl && (
+  <img
+    src={previewUrl}
+    alt="Preview"
+    className="h-64 w-full rounded-lg object-cover"
+  />
+)} 
 
         <button
           type="submit"

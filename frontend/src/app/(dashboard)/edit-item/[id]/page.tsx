@@ -64,6 +64,25 @@ export default function EditItemPage() {
     e: React.FormEvent
   ) => {
     e.preventDefault();
+    if (!name.trim()) {
+  toast.error("Please enter a name");
+  return;
+}
+
+if (!category) {
+  toast.error("Please select a category");
+  return;
+}
+
+if (!color.trim()) {
+  toast.error("Please enter a color");
+  return;
+}
+
+if (!brand.trim()) {
+  toast.error("Please enter a brand");
+  return;
+}
 
     try {
       const token = getToken();
@@ -125,16 +144,33 @@ export default function EditItemPage() {
             className="w-full rounded border p-3"
           />
 
-          <input
-            type="text"
-            value={category}
-            onChange={(e) =>
-              setCategory(
-                e.target.value
-              )
-            }
-            className="w-full rounded border p-3"
-          />
+          <select
+  value={category}
+  onChange={(e) =>
+    setCategory(e.target.value)
+  }
+  className="w-full rounded border p-3"
+>
+  <option value="">
+    Select Category
+  </option>
+
+  <option value="Topwear">
+    Topwear
+  </option>
+
+  <option value="Bottomwear">
+    Bottomwear
+  </option>
+
+  <option value="Footwear">
+    Footwear
+  </option>
+
+  <option value="Accessories">
+    Accessories
+  </option>
+</select>
 
           <input
             type="text"

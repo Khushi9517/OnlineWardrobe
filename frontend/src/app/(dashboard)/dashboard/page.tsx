@@ -20,6 +20,10 @@ export default function DashboardPage() {
   const [items, setItems] = useState<WardrobeItem[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const [search, setSearch] =
+  useState("");
+  const [selectedCategory, setSelectedCategory] =
+  useState("All");
   const handleLogout = () => {
   removeToken();
 
@@ -96,6 +100,58 @@ export default function DashboardPage() {
     );
   }
 
+  const filteredItems =
+  items.filter((item) => {
+    const matchesSearch =
+      item.name
+        .toLowerCase()
+        .includes(
+          search.toLowerCase()
+        );
+
+    const matchesCategory =
+      selectedCategory ===
+        "All" ||
+      item.category ===
+        selectedCategory;
+
+    return (
+      matchesSearch &&
+      matchesCategory
+    );
+  });
+
+  const totalItems = items.length;
+
+const topwearCount =
+  items.filter(
+    (item) =>
+      item.category ===
+      "Topwear"
+  ).length;
+
+const bottomwearCount =
+  items.filter(
+    (item) =>
+      item.category ===
+      "Bottomwear"
+  ).length;
+
+const footwearCount =
+  items.filter(
+    (item) =>
+      item.category ===
+      "Footwear"
+  ).length;
+
+const accessoriesCount =
+  items.filter(
+    (item) =>
+      item.category ===
+      "Accessories"
+  ).length;
+
+
   return (
     <AuthGuard>
     <div className="p-8">
@@ -111,14 +167,97 @@ export default function DashboardPage() {
     >
       + Add Item
     </Link>
-
-    <button
-      onClick={handleLogout}
-      className="rounded border px-4 py-2"
-    >
-      Logout
-    </button>
   </div>
+</div>
+
+<div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-5">
+  <div className="rounded-xl border p-4">
+    <p className="text-sm text-gray-500">
+      Total
+    </p>
+
+    <p className="text-2xl font-bold">
+      {totalItems}
+    </p>
+  </div>
+
+  <div className="rounded-xl border p-4">
+    <p className="text-sm text-gray-500">
+      Topwear
+    </p>
+
+    <p className="text-2xl font-bold">
+      {topwearCount}
+    </p>
+  </div>
+
+  <div className="rounded-xl border p-4">
+    <p className="text-sm text-gray-500">
+      Bottomwear
+    </p>
+
+    <p className="text-2xl font-bold">
+      {bottomwearCount}
+    </p>
+  </div>
+
+  <div className="rounded-xl border p-4">
+    <p className="text-sm text-gray-500">
+      Footwear
+    </p>
+
+    <p className="text-2xl font-bold">
+      {footwearCount}
+    </p>
+  </div>
+
+  <div className="rounded-xl border p-4">
+    <p className="text-sm text-gray-500">
+      Accessories
+    </p>
+
+    <p className="text-2xl font-bold">
+      {accessoriesCount}
+    </p>
+  </div>
+</div>
+
+
+<input
+  type="text"
+  placeholder="Search clothes..."
+  value={search}
+  onChange={(e) =>
+    setSearch(e.target.value)
+  }
+  className="mb-6 w-full rounded-lg border p-3"
+/>
+
+<div className="mb-6 flex gap-2 flex-wrap">
+  {[
+    "All",
+    "Topwear",
+    "Bottomwear",
+    "Footwear",
+    "Accessories",
+  ].map((category) => (
+    <button
+      key={category}
+      onClick={() =>
+        setSelectedCategory(
+          category
+        )
+      }
+      className={`rounded-full px-4 py-2 border ${
+        selectedCategory ===
+        category
+          ? "bg-black text-white"
+          : ""
+      }`}
+    >
+      {category}
+    </button>
+  ))}
 </div>
 
       <div
@@ -130,7 +269,7 @@ export default function DashboardPage() {
           lg:grid-cols-3
         "
       >
-        {items.map((item) => (
+        {filteredItems.map((item) => (
           <WardrobeCard
             key={item._id}
             item={item}

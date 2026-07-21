@@ -77,3 +77,44 @@ export const deleteWardrobeItem = async (
 
   return response.data;
 };
+
+export const getWardrobeItem = async (
+  token: string,
+  itemId: string
+) => {
+  const response = await api.get(
+    `/api/wardrobe/${itemId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data.item;
+};
+
+export const updateWardrobeItem = async (
+  token: string,
+  itemId: string,
+  data: {
+    name: string;
+    category: string;
+    color: string;
+    brand: string;
+    imageUrl?: string;
+    imagePublicId?: string;
+  }
+) => {
+  const response = await api.put(
+    `/api/wardrobe/${itemId}`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data.item;
+};

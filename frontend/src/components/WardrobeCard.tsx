@@ -1,4 +1,5 @@
 import { WardrobeItem } from "@/types/wardrobe.types";
+import Link from "next/link";
 
 interface Props {
   item: WardrobeItem;
@@ -39,14 +40,26 @@ export default function WardrobeCard({
         <p className="mt-2 text-sm font-medium text-gray-700">
           {item.brand}
         </p>
-        <button
-  onClick={() =>
-    onDelete(item._id)
-  }
-  className="mt-4 w-full rounded bg-red-500 p-2 text-white"
->
-  Delete
-</button>
+
+
+<div className="mt-4 flex gap-2">
+  <Link
+    href={`/edit-item/${item._id}`}
+    className="flex-1 rounded bg-black p-2 text-center text-white"
+  >
+    Edit
+  </Link>
+
+  <button
+    onClick={() =>
+      onDelete(item._id)
+    }
+    className="flex-1 rounded bg-red-500 p-2 text-white"
+  >
+    Delete
+  </button>
+</div>
+
       </div>
     </div>
   );

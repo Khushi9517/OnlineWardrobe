@@ -10,6 +10,7 @@ import {
   uploadImage,
 } from "@/services/wardrobe.service";
 import AuthGuard from "@/components/AuthGuard";
+import toast from "react-hot-toast";
 
 export default function AddItemPage() {
   const router = useRouter();
@@ -72,13 +73,13 @@ export default function AddItemPage() {
         }
       );
 
+      toast.success("Item created successfully");
+
       router.push("/dashboard");
     } catch (error) {
       console.error(error);
 
-      alert(
-        "Failed to create item"
-      );
+      toast.error("Failed to create item");
     } finally {
       setLoading(false);
     }

@@ -11,6 +11,7 @@ import {
   getWardrobeItem,
   updateWardrobeItem,
 } from "@/services/wardrobe.service";
+import toast from "react-hot-toast";
 
 export default function EditItemPage() {
   const router = useRouter();
@@ -82,11 +83,13 @@ export default function EditItemPage() {
         }
       );
 
+      toast.success("Item updated successfully");
+
       router.push("/dashboard");
     } catch (error) {
       console.error(error);
 
-      alert("Failed to update item");
+      toast.error("Failed to update item");
     } finally {
       setSaving(false);
     }

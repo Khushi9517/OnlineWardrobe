@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { registerUser } from "@/services/auth.service";
 import { saveToken } from "@/lib/auth";
+import { toast } from "react-hot-toast/headless";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -35,14 +36,12 @@ const handleSubmit = async (
 
     saveToken(response.token);
 
+    toast.success("Registration successful");
     router.push("/dashboard");
   } catch (error: any) {
   console.error(error);
 
-  alert(
-    error?.response?.data?.message ||
-    "Registration failed"
-  );
+  toast.error("Registration failed");
   } finally {
     setLoading(false);
   }

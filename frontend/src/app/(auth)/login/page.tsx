@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { loginUser } from "@/services/auth.service";
 import { saveToken } from "@/lib/auth";
+import { toast } from "react-hot-toast/headless";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -33,14 +34,12 @@ export default function LoginPage() {
 
       saveToken(response.token);
 
+      toast.success("Login successful");
       router.push("/dashboard");
     } catch (error: any) {
       console.error(error);
 
-      alert(
-        error?.response?.data?.message ||
-          "Login failed"
-      );
+      toast.error("Login failed");
     } finally {
       setLoading(false);
     }

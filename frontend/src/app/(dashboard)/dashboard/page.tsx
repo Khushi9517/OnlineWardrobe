@@ -15,6 +15,7 @@ import { removeToken } from "@/lib/auth";
 import {
   deleteWardrobeItem,
 } from "@/services/wardrobe.service";
+import toast from "react-hot-toast";
 
 export default function DashboardPage() {
   const [items, setItems] = useState<WardrobeItem[]>([]);
@@ -24,6 +25,8 @@ export default function DashboardPage() {
   useState("");
   const [selectedCategory, setSelectedCategory] =
   useState("All");
+  const [sortBy, setSortBy] =
+  useState("newest");
   const handleLogout = () => {
   removeToken();
 
@@ -60,10 +63,20 @@ export default function DashboardPage() {
 
     if (!token) return;
 
+  const confirmed =
+  window.confirm(
+    "Are you sure you want to delete this item?"
+  );
+
+if (!confirmed) {
+  return;
+}
+
     await deleteWardrobeItem(
       token,
       itemId
     );
+    toast.success("Item deleted");
 
     setItems((prev) =>
       prev.filter(
@@ -74,9 +87,7 @@ export default function DashboardPage() {
   } catch (error) {
     console.error(error);
 
-    alert(
-      "Failed to delete item"
-    );
+    toast.error("Failed to delete item");
   }
 };
 
@@ -100,8 +111,8 @@ export default function DashboardPage() {
     );
   }
 
-  const filteredItems =
-  items.filter((item) => {
+  const filteredItems = items
+  .filter((item) => {
     const matchesSearch =
       item.name
         .toLowerCase()
@@ -119,6 +130,39 @@ export default function DashboardPage() {
       matchesSearch &&
       matchesCategory
     );
+  })
+  .sort((a, b) => {
+    switch (sortBy) {
+      case "oldest":
+        return (
+          new Date(
+            a.createdAt
+          ).getTime() -
+          new Date(
+            b.createdAt
+          ).getTime()
+        );
+
+      case "az":
+        return a.name.localeCompare(
+          b.name
+        );
+
+      case "za":
+        return b.name.localeCompare(
+          a.name
+        );
+
+      default:
+        return (
+          new Date(
+            b.createdAt
+          ).getTime() -
+          new Date(
+            a.createdAt
+          ).getTime()
+        );
+    }
   });
 
   const totalItems = items.length;
@@ -150,7 +194,6 @@ const accessoriesCount =
       item.category ===
       "Accessories"
   ).length;
-
 
   return (
     <AuthGuard>
@@ -260,23 +303,58 @@ const accessoriesCount =
   ))}
 </div>
 
-      <div
-        className="
-          grid
-          grid-cols-1
-          gap-6
-          sm:grid-cols-2
-          lg:grid-cols-3
-        "
-      >
-        {filteredItems.map((item) => (
-          <WardrobeCard
-            key={item._id}
-            item={item}
-            onDelete={handleDelete}
-          />
-        ))}
-      </div>
+<select
+  value={sortBy}
+  onChange={(e) => setSortBy(e.target.value)}
+  className="mb-6 rounded-lg border p-3"
+>
+  <option value="newest">
+    Newest First
+  </option>
+
+  <option value="oldest">
+    Oldest First
+  </option>
+
+  <option value="az">
+    Name A-Z
+  </option>
+
+  <option value="za">
+    Name Z-A
+  </option>
+</select>
+
+
+      {filteredItems.length === 0 ? (
+  <div className="py-16 text-center">
+    <h2 className="text-2xl font-semibold">
+      No items found
+    </h2>
+
+    <p className="mt-2 text-gray-500">
+      Try another search or filter.
+    </p>
+  </div>
+) : (
+  <div
+    className="
+      grid
+      grid-cols-1
+      gap-6
+      sm:grid-cols-2
+      lg:grid-cols-3
+    "
+  >
+    {filteredItems.map((item) => (
+      <WardrobeCard
+        key={item._id}
+        item={item}
+        onDelete={handleDelete}
+      />
+    ))}
+  </div>
+)}
     </div>
     </AuthGuard>
   );

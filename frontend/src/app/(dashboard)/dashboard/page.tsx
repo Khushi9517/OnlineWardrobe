@@ -16,6 +16,7 @@ import {
   deleteWardrobeItem,
 } from "@/services/wardrobe.service";
 import toast from "react-hot-toast";
+import AnalyticsCard from "@/components/AnalyticsCard";
 
 export default function DashboardPage() {
   const [items, setItems] = useState<WardrobeItem[]>([]);
@@ -214,57 +215,80 @@ const accessoriesCount =
 </div>
 
 <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-5">
-  <div className="rounded-xl border p-4">
-    <p className="text-sm text-gray-500">
-      Total
-    </p>
+  <AnalyticsCard
+    title="Total"
+    count={totalItems}
+  />
 
-    <p className="text-2xl font-bold">
-      {totalItems}
-    </p>
-  </div>
+  <AnalyticsCard
+    title="Topwear"
+    count={topwearCount}
+  />
 
-  <div className="rounded-xl border p-4">
-    <p className="text-sm text-gray-500">
-      Topwear
-    </p>
+  <AnalyticsCard
+    title="Bottomwear"
+    count={bottomwearCount}
+  />
 
-    <p className="text-2xl font-bold">
-      {topwearCount}
-    </p>
-  </div>
+  <AnalyticsCard
+    title="Footwear"
+    count={footwearCount}
+  />
 
-  <div className="rounded-xl border p-4">
-    <p className="text-sm text-gray-500">
-      Bottomwear
-    </p>
+  <AnalyticsCard
+    title="Accessories"
+    count={accessoriesCount}
+  />
+</div>
+<div className="mb-8 rounded-xl border p-6">
+  <h2 className="mb-4 text-xl font-semibold">
+    Category Distribution
+  </h2>
 
-    <p className="text-2xl font-bold">
-      {bottomwearCount}
-    </p>
-  </div>
+  <div className="space-y-4">
+    {[
+      {
+        label: "Topwear",
+        value: topwearCount,
+      },
+      {
+        label: "Bottomwear",
+        value: bottomwearCount,
+      },
+      {
+        label: "Footwear",
+        value: footwearCount,
+      },
+      {
+        label: "Accessories",
+        value: accessoriesCount,
+      },
+    ].map((item) => (
+      <div key={item.label}>
+        <div className="mb-1 flex justify-between">
+          <span>{item.label}</span>
 
-  <div className="rounded-xl border p-4">
-    <p className="text-sm text-gray-500">
-      Footwear
-    </p>
+          <span>{item.value}</span>
+        </div>
 
-    <p className="text-2xl font-bold">
-      {footwearCount}
-    </p>
-  </div>
-
-  <div className="rounded-xl border p-4">
-    <p className="text-sm text-gray-500">
-      Accessories
-    </p>
-
-    <p className="text-2xl font-bold">
-      {accessoriesCount}
-    </p>
+        <div className="h-3 rounded bg-gray-200">
+          <div
+            className="h-3 rounded bg-black"
+            style={{
+              width: `${
+                totalItems
+                  ? (item.value /
+                      totalItems) *
+                    100
+                  : 0
+              }%`,
+            }}
+          />
+        </div>
+      </div>
+    ))}
   </div>
 </div>
-
 
 <input
   type="text"
